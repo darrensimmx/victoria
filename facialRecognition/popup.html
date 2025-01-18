@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Emotion Recognition</title>
+    <style>
+        #videoElement {
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+        }
+        #emotionOutput {
+            font-size: 18px;
+            margin-top: 20px;
+            color: green;
+        }
+        #startRecognition {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #startRecognition:hover {
+            background-color: #45a049;
+        }
+        #uploadInput {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Facial Emotion Recognition</h1>
+
+    <!-- Webcam video element -->
+    <video id="videoElement" autoplay></video>
+
+    <!-- Emotion output -->
+    <div id="emotionOutput">Waiting for detection...</div>
+
+    <!-- Buttons for starting recognition and uploading image -->
+    <button id="startRecognition">Start Recognition</button>
+
+    <!-- Image upload input -->
+    <input type="file" id="uploadInput" accept="image/*" />
+
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
+<script>
+    async function loadFaceApiModel() {
+        await faceapi.nets.ssdMobilenetv1.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/models');
+        await faceapi.nets.faceLandmark68Net.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/models');
+        await faceapi.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/models');
+    }
+
+    loadFaceApiModel().then(() => {
+        console.log("Models loaded successfully");
+    }).catch(err => {
+        console.error("Error loading models", err);
+    });
+</script>
+
+    <script src="popup.js"></script>
+</body>
+</html>
