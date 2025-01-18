@@ -1,4 +1,4 @@
-let currEmotion = null;
+window.currEmotion = null;
 
 // Load models
 async function loadModels() {
@@ -102,3 +102,4 @@ function logCurrentEmotion(updatedEmotion) {
 document.getElementById('startRecognition').addEventListener('click', () => {
     setupCamera();  // Start the webcam
 });
+
