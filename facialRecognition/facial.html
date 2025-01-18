@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Emotion Recognition</title>
+    <style>
+        #videoElement {
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ccc;
+        }
+        #emotionOutput {
+            font-size: 18px;
+            margin-top: 20px;
+            color: green;
+        }
+        #startRecognition {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #startRecognition:hover {
+            background-color: #45a049;
+        }
+        #uploadInput {
+            margin-top: 20px;
+        }
+    </style>
+    <!-- <script src="faceapi.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+
+    
+</head>
+<body>
+    <h1>Facial Emotion Recognition</h1>
+
+    <!-- Webcam video element -->
+    <video id="videoElement" autoplay></video>
+    <canvas id="mycanvas"></canvas>
+   
+    <div id="emotionOutput">Waiting for detection...</div>
+
+    <!-- Buttons for starting recognition and uploading image -->
+    <button id="startRecognition">Start Recognition</button>
+
+<script>
+
+</script>
+
+    <script src="facial.js"></script>
+</body>
+</html>
+
