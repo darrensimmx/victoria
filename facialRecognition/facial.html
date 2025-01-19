@@ -36,6 +36,37 @@
         #toggleMode:hover {
             background-color: #005f7f;
         }
+
+        /* Style for the custom popup */
+        #customPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            text-align: center;
+        }
+        #customPopup img {
+            width: 100px;
+            height: 100px;
+            margin-top: 10px;
+        }
+        #closePopup {
+            margin-top: 20px;
+            padding: 5px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #closePopup:hover {
+            background-color: #e53935;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
 </head>
@@ -53,6 +84,13 @@
     <button id="startRecognition">Start Recognition</button>
     <button id="toggleMode">Toggle Mode: Normal</button>
 
+    <!-- Custom Popup -->
+    <div id="customPopup">
+        <p id="popupMessage"></p>
+        <img id="popupImage" src="" alt="Mood Image">
+        <button id="closePopup">Close</button>
+    </div>
+
     <script src="facial.js"></script>
     <script type="module">
         import './facial.js'; // Facial emotion detection logic
@@ -65,46 +103,92 @@
         // Function to handle pop-ups with cooldown and different responses for modes
         function showMoodPopup() {
             if (window.currMood && !moodCooldown) {
-                // Check for mood and popup based on mood
+                let message = "";
+                let imageUrl = "";
+                
+                // Switch the message and image based on the current mood and mode
                 switch (window.currMood) {
                     case "anger":
                         if (normalMode) {
-                            alert("Calm down... Let's take a 5-minute break!");
+                            message = "Calm down... Let's take a 5-minute break!";
                         } else {
-                            alert("Relax bro.. it's not that deep");
+                            message = "Anger detected! Just chill, bro.";
+                            imageUrl = "TrollImages/angry_emote.png"; // Path to your downloaded image
                         }
                         break;
                     case "disgust":
                         if (normalMode) {
-                            alert("Let's unwind what you saw....");
+                            message = "Let's unwind what you saw....";
                         } else {
-                            alert("Did you look at the mirror??");
+                            message = "Yikes! You look like you've seen a bug.";
+                            imageUrl = "TrollImages/disgust.webp"; // Path to your downloaded image
                         }
                         break;
                     case "fear":
                         if (normalMode) {
-                            alert("EWWWWW");
+                            message = "EWWWWW";
                         } else {
-                            alert("Did you leave your guts at home?");
+                            message = "Don't be scared, it's just a kitten.";
+                            imageUrl = "TrollImages/scared-cat-meme.webp"; // Path to your downloaded image
                         }
                         break;
                     case "surprised":
                         if (normalMode) {
-                            alert("Phew...caught me off guard");
+                            message = "HUHHHHH??????/";
                         } else {
-                            alert("HUHHH????!??!??!");
+                            message = "NANII???!!?";
+                            imageUrl = "TrollImages/shocked-face-shocked-meme.gif   "; // Path to your downloaded image
                         }
                         break;
                     case "sad":
                         if (normalMode) {
-                            alert("CHEER UP BABY! CHEER UP BABY!");
+                            message = "CHEER UP BABY! CHEER UP BABY!";
                         } else {
-                            alert("Don't be sad, be better");
+                            message = "Don't be sad, be better";
+                            imageUrl = "TrollImages/Chill_guy.jpg"; // Path to your downloaded image
                         }
                         break;
                     default:
                         break;
                 }
+
+                if (!normalMode && imageUrl) {
+            // Check if the image exists (fallback to a default image if not found)
+            const popupImage = document.getElementById('popupImage');
+            const img = new Image();
+            img.onload = function() {
+                // Image exists, update the popup image
+                popupImage.src = imageUrl;
+            };
+            img.onerror = function() {
+                // Image doesn't exist, use a default image
+                popupImage.src = "images/default-image.jpg";  // Set this to a valid default image
+            };
+            img.src = imageUrl;  // Start loading the image
+        }
+
+            // Show the custom popup with the message and image
+            const popup = document.getElementById('customPopup');
+            const popupMessage = document.getElementById('popupMessage');
+            const closePopupButton = document.getElementById('closePopup');
+
+            popupMessage.textContent = message;
+            if (normalMode) {
+            // Hide the image if in Normal mode
+            popupImage.style.display = 'none';
+        } else {
+            // Show the image if in Troll mode
+            popupImage.style.display = 'block';
+            popupImage.src = imageUrl;  // Set the image source
+        }
+
+        popup.style.display = 'block';
+
+            // Close the popup when the button is clicked
+            closePopupButton.addEventListener('click', () => {
+                popup.style.display = 'none'; // Hide the popup
+            });
+
                 // Set cooldown to prevent repeated alerts for the same mood
                 moodCooldown = true;
                 setTimeout(() => {
