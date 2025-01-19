@@ -29,10 +29,7 @@
             margin-top: 20px;
         }
     </style>
-    <!-- <script src="faceapi.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
-
-    
 </head>
 <body>
     <h1>Facial Emotion Recognition</h1>
@@ -42,18 +39,78 @@
     <canvas id="mycanvas"></canvas>
    
     <div id="emotionOutput">Waiting for detection...</div>
+    <div id="moodOutput">Mood will be displayed here...</div>
 
-    <!-- Buttons for starting recognition and uploading image -->
+    <!-- Button for starting recognition -->
     <button id="startRecognition">Start Recognition</button>
 
-    <!-- Add your pop up fn here -->
-     
-
-<script>
-
-</script>
-
     <script src="facial.js"></script>
+    <script type="module">
+        import './facial.js'; // Facial emotion detection logic
+        import './intermediate.js'; // Mood calculation logic
+
+        // Variable to track the cooldown state
+        let moodCooldown = false;
+
+        // Function to handle pop-ups with cooldown in HTML
+        function showMoodPopup() {
+            if (window.currMood && !moodCooldown) {
+                // Check for mood and popup based on mood
+                switch (window.currMood) {
+                    case "anger":
+                        alert("You're feeling angry. Let's take a 5-minute break!");
+                        break;
+                    case "disgust":
+                        alert("You're feeling disgusted.");
+                        break;
+                    case "fear":
+                        alert("EWWWWW");
+                        break;
+                    case "surprised":
+                        alert("HUHHHHH??????/");
+                        break;
+                    case "sad":
+                        alert("CHEER UP BABY! CHEER UP BABY");
+                        break;
+                    default:
+                        break;
+                }
+                // Set cooldown to prevent repeated alerts for the same mood
+                moodCooldown = true;
+                setTimeout(() => {
+                    moodCooldown = false; // Reset cooldown after 10 seconds
+                }, 10000); // 10-second cooldown
+            }
+        }
+
+        // Display mood and emotion updates
+        setInterval(() => {
+            const detectedEmotion = window.currEmotion; // Access the global `currEmotion` variable
+            const emotionOutput = document.getElementById('emotionOutput');
+            const moodOutput = document.getElementById('moodOutput');
+
+            // Update the emotion display
+            if (detectedEmotion) {
+                emotionOutput.textContent = `Current Emotion: ${detectedEmotion}`;
+            } else {
+                emotionOutput.textContent = 'No emotion detected.';
+            }
+
+            // Update the mood display
+            if (window.currMood) {
+                moodOutput.textContent = `Current Mood: ${window.currMood}`;
+            } else {
+                moodOutput.textContent = 'Mood not yet determined.';
+            }
+
+            // Call the function to check and show popup if needed
+            showMoodPopup();
+        }, 2000); // Update every 2 seconds
+
+        // Start recognition on button click
+        document.getElementById('startRecognition').addEventListener('click', () => {
+            setupCamera(); // Call the function from `facial.js`
+        });
+    </script>
 </body>
 </html>
-

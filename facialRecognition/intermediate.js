@@ -1,6 +1,6 @@
-import {currEmotion} from './facial.js';
 
-let currMood = "";
+
+window.currMood = "";
 
 // Initialize the state of emotions with their corresponding values
 let moods = {
@@ -9,7 +9,7 @@ let moods = {
     fear: 0.5,
     happy: 0.5,
     sad: 0.5,
-    surprise: 0.5,
+    surprised: 0.5,
     neutral: 0, // Neutral doesn't have a value but is used to handle its state
   };
 
@@ -46,9 +46,9 @@ let moods = {
   
     // Update moods based on the current state
     for (const mood in moods) {
-      if (currentState === "neutral") {
+      if (!currentState || currentState === "neutral") {
         // Neutral: All values decrease by 0.05
-        moods[mood] = Math.max(0, moods[mood] - 0.05);
+        moods[mood] = Math.max(0, moods[mood] - 0.3);
       } else if (mood === currentState) {
         // The current state's value increases by 0.1
         moods[mood] = Math.min(1, moods[mood] + 0.1);
@@ -65,10 +65,10 @@ let moods = {
   }
 
 setInterval(() => {
-    calMood(currEmotion);
+    calMood(window.currEmotion);
 }, 1000);
 
-export {currMood};
+
   
 
 
