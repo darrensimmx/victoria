@@ -111,6 +111,51 @@
         document.getElementById('startRecognition').addEventListener('click', () => {
             setupCamera(); // Call the function from `facial.js`
         });
+
+        function showMoodNotification() {
+    if (window.currMood && chrome.runtime && chrome.runtime.sendMessage) {
+        let notificationMessage = "";
+        switch (window.currMood) {
+            case "happy":
+                notificationMessage = "You look happy! Keep smiling! 😊";
+                break;
+            case "sad":
+                notificationMessage = "You seem sad. Hope things get better soon. 💙";
+                break;
+            case "anger":
+                notificationMessage = "Take a deep breath. Don't let anger take over. 😡";
+                break;
+            case "fear":
+                notificationMessage = "Feeling scared? You're braver than you think! 🌟";
+                break;
+            case "disgust":
+                notificationMessage = "Something bothering you? Hang in there! 🤢";
+                break;
+            case "surprised":
+                notificationMessage = "Surprised? Life's full of wonders! 😲";
+                break;
+            default:
+                notificationMessage = "Neutral mood detected. Stay balanced. 🙂";
+        }
+
+        // Send the notification via Chrome runtime
+        chrome.runtime.sendMessage(
+            { moodNotification: notificationMessage },
+            (response) => {
+                console.log('Notification Triggered:', response);
+            }
+        );
+    } else {
+        console.error("Chrome runtime is unavailable. Are you running this inside a Chrome extension?");
+    }
+}
+
+
+// Set an interval to check and display notifications every 10 seconds
+setInterval(() => {
+    showMoodNotification();
+}, 10000); // Every 10 seconds
+
     </script>
 </body>
 </html>

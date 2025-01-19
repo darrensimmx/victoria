@@ -1,6 +1,5 @@
 {
-    "name": "Notif",
-    "description": "Get notifications!",
+    "name": "Facial Emotion Notifications",
     "version": "1.0",
     "manifest_version": 3,
     "background": {
@@ -9,9 +8,10 @@
     "permissions": [
         "notifications",
         "storage",
-        "alarms"
+        "alarms",
+        "runtime"
     ],
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "facial.html"
     }
 }

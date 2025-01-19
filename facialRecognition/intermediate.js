@@ -25,44 +25,36 @@ let moods = {
     currentMood();
   }
   
+  window.currMood = "";
   function currentMood() {
-    // Find the mood with the highest value in the moods object
     let highestMood = Object.keys(moods).reduce((max, current) => {
-      return moods[current] > moods[max] ? current : max;
+        return moods[current] > moods[max] ? current : max;
     });
+
+    if (window.currMood !== highestMood) { // Log only when mood changes
+        console.log(`Mood changed from ${window.currMood} to ${highestMood}`);
+    }
+
+    window.currMood = highestMood; // Update global mood variable
+}
+
   
-    // Set currMood to the mood with the highest value
-    currMood = highestMood;
-    console.log(`Current Mood: ${currMood} with value: ${moods[currMood]}`);  // Log the mood with the highest value
-  }
-  
-  function calMood(currentState) {
-    // Ensure the state is valid
-    const validStates = Object.keys(moods);
-    if (!validStates.includes(currentState)) {
-      console.error(`Invalid state: ${currentState}`);
+function calMood(currentState) {
+  if (!Object.keys(moods).includes(currentState)) {
+      console.error(`Invalid emotion detected: ${currentState}`);
       return;
-    }
-  
-    // Update moods based on the current state
-    for (const mood in moods) {
-      if (!currentState || currentState === "neutral") {
-        // Neutral: All values decrease by 0.05
-        moods[mood] = Math.max(0, moods[mood] - 0.3);
-      } else if (mood === currentState) {
-        // The current state's value increases by 0.1
-        moods[mood] = Math.min(1, moods[mood] + 0.1);
-      } else {
-        // Other states decrease by 0.1
-        moods[mood] = Math.max(0, moods[mood] - 0.1);
-      }
-    }
-  
-    currentMood();
-    // Log the updated moods
-    console.log(moods);
-    console.log(currMood);
   }
+
+  // Update moods and log results
+  for (let mood in moods) {
+      moods[mood] = (mood === currentState)
+          ? Math.min(1, moods[mood] + 0.1)
+          : Math.max(0, moods[mood] - 0.1);
+  }
+  currentMood();
+  console.log("Updated Moods:", moods);
+}
+
 
 setInterval(() => {
     calMood(window.currEmotion);

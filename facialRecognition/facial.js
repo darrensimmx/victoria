@@ -94,12 +94,33 @@ function getDominantEmotion(emotions) {
 
 // Log current emotion
 function logCurrentEmotion(updatedEmotion) {
-    currEmotion = updatedEmotion;
-    console.log('Current Emotion:', currEmotion);  // Log the updated emotion
+    window.currEmotion = updatedEmotion;
+    console.log('Detected Emotion:', window.currEmotion);
 }
+
 
 // Event listener for starting recognition via webcam
 document.getElementById('startRecognition').addEventListener('click', () => {
     setupCamera();  // Start the webcam
 });
+
+function notifyMoodChange() {
+    if (window.currMood) {
+        chrome.runtime.sendMessage(
+            { moodNotification: `Current mood is ${window.currMood}.` },
+            (response) => console.log("Notification sent:", response)
+        );
+    }
+}
+
+// Trigger notifications every 5 seconds (or any desired interval)
+setInterval(() => {
+    notifyMoodChange();
+}, 5000);
+
+if (chrome.runtime && chrome.runtime.sendMessage) {
+    console.log("Chrome API available in this context.");
+} else {
+    console.error("Chrome API not accessible in this context. Are you running this as a Chrome extension?");
+}
 
