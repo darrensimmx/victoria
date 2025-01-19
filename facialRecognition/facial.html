@@ -25,8 +25,16 @@
         #startRecognition:hover {
             background-color: #45a049;
         }
-        #uploadInput {
+        #toggleMode {
             margin-top: 20px;
+            padding: 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #toggleMode:hover {
+            background-color: #005f7f;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
@@ -41,36 +49,58 @@
     <div id="emotionOutput">Waiting for detection...</div>
     <div id="moodOutput">Mood will be displayed here...</div>
 
-    <!-- Button for starting recognition -->
+    <!-- Buttons for starting recognition and toggling mode -->
     <button id="startRecognition">Start Recognition</button>
+    <button id="toggleMode">Toggle Mode: Normal</button>
 
     <script src="facial.js"></script>
     <script type="module">
         import './facial.js'; // Facial emotion detection logic
         import './intermediate.js'; // Mood calculation logic
 
-        // Variable to track the cooldown state
+        // Variable to track the cooldown state and mode
         let moodCooldown = false;
+        let normalMode = true;  // Default mode is Normal
 
-        // Function to handle pop-ups with cooldown in HTML
+        // Function to handle pop-ups with cooldown and different responses for modes
         function showMoodPopup() {
             if (window.currMood && !moodCooldown) {
                 // Check for mood and popup based on mood
                 switch (window.currMood) {
                     case "anger":
-                        alert("You're feeling angry. Let's take a 5-minute break!");
+                        if (normalMode) {
+                            alert("Calm down... Let's take a 5-minute break!");
+                        } else {
+                            alert("Relax bro.. it's not that deep");
+                        }
                         break;
                     case "disgust":
-                        alert("You're feeling disgusted.");
+                        if (normalMode) {
+                            alert("Let's unwind what you saw....");
+                        } else {
+                            alert("Did you look at the mirror??");
+                        }
                         break;
                     case "fear":
-                        alert("EWWWWW");
+                        if (normalMode) {
+                            alert("EWWWWW");
+                        } else {
+                            alert("Did you leave your guts at home?");
+                        }
                         break;
                     case "surprised":
-                        alert("HUHHHHH??????/");
+                        if (normalMode) {
+                            alert("Phew...caught me off guard");
+                        } else {
+                            alert("HUHHH????!??!??!");
+                        }
                         break;
                     case "sad":
-                        alert("CHEER UP BABY! CHEER UP BABY");
+                        if (normalMode) {
+                            alert("CHEER UP BABY! CHEER UP BABY!");
+                        } else {
+                            alert("Don't be sad, be better");
+                        }
                         break;
                     default:
                         break;
@@ -110,6 +140,12 @@
         // Start recognition on button click
         document.getElementById('startRecognition').addEventListener('click', () => {
             setupCamera(); // Call the function from `facial.js`
+        });
+
+        // Toggle mode between Normal and Troll
+        document.getElementById('toggleMode').addEventListener('click', () => {
+            normalMode = !normalMode;  // Switch the mode
+            document.getElementById('toggleMode').textContent = normalMode ? 'Toggle Mode: Normal' : 'Toggle Mode: Troll';  // Update the button text
         });
     </script>
 </body>
